@@ -1,13 +1,15 @@
 ﻿using Factory_Pattern_First_Look.Business.Models.Shipping;
+using Factory_Pattern_First_Look.Factories;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Factory_Pattern_First_Look.Factory
 {
-    public class ShippingProviderFactory
+    public class StandardShippingProviderFactory: ShippingProviderFactory
     {
-        public static ShippingProvider CreateShippingProvider(string country) 
+
+        public override ShippingProvider CreateShippingProvider(string country) 
             {
 
             #region Create Shipping Provider
