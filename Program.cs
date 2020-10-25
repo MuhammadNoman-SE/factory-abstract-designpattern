@@ -41,7 +41,22 @@ namespace Factory_Pattern_First_Look
             order.LineItems.Add(new Item("CONSULTING", "Building a website", 100m), 1);
             #endregion
 
-            var cart = new ShoppingCart(order,new StandardShippingProviderFactory());
+            IPurchaseProviderFactory purchaseProviderFactory;
+
+            if(order.Sender.Country == "Sweden")
+            {
+                purchaseProviderFactory = new SwedishPostalServiceShippingProviderFactory();
+            }
+            else if (order.Sender.Country == "Australia")
+            {
+                purchaseProviderFactory = new AustraliaPostShippingProviderFctory();
+            }
+            else
+            {
+                throw new NotSupportedException("Sender country has no purchase provider");
+            }
+
+            var cart = new ShoppingCart(order, purchaseProviderFactory);
 
             var shippingLabel = cart.Finalize();
 

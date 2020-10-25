@@ -9,19 +9,31 @@ namespace Factory_Pattern_First_Look.Business
     public class ShoppingCart
     {
         private readonly Order order;
-        private ShippingProviderFactory shippingProviderFactory;
+        private readonly IPurchaseProviderFactory purchaseProviderFactory;
 
-        public ShoppingCart(Order order, ShippingProviderFactory shippingProviderFactory)
+        public ShoppingCart(Order order, IPurchaseProviderFactory purchaseProviderFactory)
         {
             this.order = order;
-            this.shippingProviderFactory = shippingProviderFactory;
+            this.purchaseProviderFactory = purchaseProviderFactory;
         }
 
         public string Finalize()    
         {
 
-            ShippingProvider shippingProvider = shippingProviderFactory.CreateShippingProvider(order.Sender.Country);
-            order.ShippingStatus = ShippingStatus.ReadyForShippment;
+            ShippingProvider shippingProvider = purchaseProviderFactory.CreateShippingProvider(order.Sender.Country);
+            var invoice = purchaseProviderFactory.CreateInvoice(order);
+
+            // Send invoice
+
+            invoice.GenerateInvoice();
+
+            var summary = purchaseProviderFactory.CreateSummary(order);
+
+            summary.Send();
+
+            // Send summary
+
+			order.ShippingStatus = ShippingStatus.ReadyForShippment;
 
             return shippingProvider.GenerateShippingLabelFor(order);
         }
