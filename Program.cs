@@ -41,16 +41,8 @@ namespace Factory_Pattern_First_Look
             order.LineItems.Add(new Item("CONSULTING", "Building a website", 100m), 1);
             #endregion
 
-            IPurchaseProviderFactory purchaseProviderFactory;
-
-            if(order.Sender.Country == "Sweden")
-            {
-                purchaseProviderFactory = new SwedishPostalServiceShippingProviderFactory();
-            }
-            else if (order.Sender.Country == "Australia")
-            {
-                purchaseProviderFactory = new AustraliaPostShippingProviderFctory();
-            }
+            var fp = new PurchaseProviderFactoryProvider();
+            IPurchaseProviderFactory purchaseProviderFactory=fp.CreateFactory(order.Sender.Country);
             else
             {
                 throw new NotSupportedException("Sender country has no purchase provider");
